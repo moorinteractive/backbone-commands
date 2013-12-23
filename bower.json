@@ -1,0 +1,20 @@
+{
+  "name": "backbone-commands",
+  "version": "0.1.0",
+  "homepage": "https://github.com/moorinteractive/backbone-commands",
+  "authors": [
+    "R. Moorman <rob@moori.nl>"
+  ],
+  "description": "Backbone commands",
+  "main": "backbone-commands.js",
+  "keywords": [
+    "backbone",
+    "command"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "backbone": "1.1.0",
+    "underscore": "1.5.2",
+    "jquery": "2.0.3"
+  }
+}

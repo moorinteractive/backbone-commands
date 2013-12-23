@@ -1,0 +1,29 @@
+{
+  "name": "backbone-commands",
+  "version": "0.1.0",
+  "description": "Backbone commands",
+  "main": "backbone-commands.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moorinteractive/backbone-commands.git"
+  },
+  "scripts": {
+    "postinstall": "bower install",
+    "test": "grunt test"
+  },
+  "keywords": [
+    "backbone",
+    "command"
+  ],
+  "author": "R. Moorman <rob@moori.nl>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/moorinteractive/backbone-commands/issues"
+  },
+  "devDependencies": {
+    "grunt": "0.4.2",
+    "grunt-cli": "0.1.11",
+    "grunt-contrib-uglify": "0.2.7",
+    "grunt-contrib-jasmine": "0.5.2"
+  }
+}
