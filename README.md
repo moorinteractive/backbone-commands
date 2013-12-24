@@ -65,6 +65,8 @@ commands.trigger('startup');
 // ASync load of configuration via a provided API endpoint.
 var LoadConfigCommand = Backbone.ASyncCommand.extend({
     execute: function(address){
+        _.bindAll(this, 'completeCommand');
+        
         this.model.fetch({
             success: this.completeCommand
         });
@@ -72,7 +74,7 @@ var LoadConfigCommand = Backbone.ASyncCommand.extend({
 });
 
 // Assume we bind the following command under startup.
-var StartupCommand = Backbone.AsyncMacroCommand.extend({
+var StartupCommand = Backbone.ASyncMacroCommand.extend({
     initialize: function(){
         this.addSubCommand(LoadConfigCommand);
         this.addSubCommand(DefineModelCommand);
@@ -85,7 +87,7 @@ var StartupCommand = Backbone.AsyncMacroCommand.extend({
 commands.trigger('startup', 'http://localhost/api/config/?format=json);
 ```
 
-Note that when you are using an ``ASyncCommand``, you should call ``commandComplete`` when your command has finished it's async logic.
+Note that when you are using an ``ASyncCommand``, you should call ``completeCommand`` when your command has finished it's async logic.
 
 ## Changelog
 
