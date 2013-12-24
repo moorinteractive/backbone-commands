@@ -22,6 +22,7 @@ After installing the package, you can grab the `backbone-commands.js` or the min
 
 0.1.1
 
+* Added Backbone.ASyncMacroCommand and Backbone.ASyncCommand
 * Added Backbone.MacroCommand
 
 

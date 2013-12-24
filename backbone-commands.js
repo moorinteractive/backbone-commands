@@ -101,4 +101,98 @@
     // Set up inheritance for Backbone.MacroCommand.
     Backbone.MacroCommand.extend = Backbone.Model.extend;
     
+    /**
+     * Initialize a ASyncCommand.
+     */
+    var ASyncCommand = Backbone.ASyncCommand = function(){
+        this.onComplete = null;
+    };
+    
+    // Attach all inheritable methods to the ASyncCommand prototype.
+    _.extend(ASyncCommand.prototype, {
+        /**
+         *
+         */
+        execute: function(){},
+        
+        /**
+         *
+         */
+        completeCommand: function(){
+            if (this.onComplete !== null && typeof this.onComplete == 'function'){
+                this.onComplete.apply(this.onCompleteContext);
+            }
+        }
+    });
+    
+    // Set up initialize for Command.
+    Backbone.ASyncCommand.extend = Backbone.Model.extend;
+    
+    /**
+     * Initialize a ASyncMacroCommand.
+     */
+    var ASyncMacroCommand = Backbone.ASyncMacroCommand = function(){
+        this._args = [];
+        this._subCommands = [];
+        this.onComplete = null;
+        this.onCompleteContext = null;
+        
+        this.initialize.apply(this, arguments);
+    };
+    
+    // Attach all inheritable methods to the ASyncMacroCommand prototype.
+    _.extend(ASyncMacroCommand.prototype, {
+        /**
+         * Initialize the ASyncMacroCommand by adding the sub commands.
+         */
+        initialize: function(){},
+        
+        /**
+         * Execute all sub commands in added order.
+         */
+        execute: function(){
+            this._args = arguments;
+            this.executeNextCommand();
+        },
+        
+        /**
+         *
+         */
+        executeNextCommand: function(){
+            if (this._subCommands.length){
+                var command = new (this._subCommands.shift());
+                var isASync = command.onComplete !== undefined ? true : false;
+                
+                if (isASync){
+                    command.onCompleteContext = this;
+                    command.onComplete = this.executeNextCommand;
+                }
+                
+                command.execute.apply(command, this._args);
+                
+                if (!isASync){
+                    this.executeNextCommand();
+                }
+            }
+            else{
+                if (this.onComplete !== null && typeof this.onComplete == 'function'){
+                    this.onComplete.apply(this.onCompleteContext);
+                }
+                
+                this.onCompleteContext = null;
+                this.onComplete = null;
+            }
+        },
+        
+        /**
+         * @param {Backbone.Command}
+         */
+        addSubCommand: function(commandClass){
+            this._subCommands.push(commandClass);
+        }
+    });
+    
+    // Set up inheritance for Backbone.MacroCommand.
+    Backbone.ASyncMacroCommand.extend = Backbone.Model.extend;
+    
 })(_, Backbone);

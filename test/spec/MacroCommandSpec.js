@@ -11,7 +11,7 @@ describe('MacroCommand', function(){
         expect(commandInstance).not.toBeNull();
     });
     
-    it('has no subCommands after instantiation', function(){
+    it('should not have subCommands after instantiation', function(){
         var commandInstance = new Backbone.MacroCommand();
         
         expect(commandInstance._subCommands).toBeDefined();
@@ -50,6 +50,35 @@ describe('MacroCommand', function(){
                 this.addSubCommand(Backbone.Command.extend({
                     execute: function(){
                         args.push(arguments[0]);
+                    }
+                }));
+                this.addSubCommand(Backbone.Command.extend({
+                    execute: function(){
+                        args.push(arguments[1]);
+                    }
+                }));
+            }
+        });
+        
+        var commandsInstance = new Backbone.Commands();
+        commandsInstance.bind('foo', commandInstance);
+        commandsInstance.trigger('foo', 1, 2);
+        
+        expect(args).toEqual([1, 2]);
+    });
+    
+    it('should execute inherited macrocommand', function(){
+        var args = [];
+        
+        var commandInstance = Backbone.MacroCommand.extend({
+            initialize: function(){
+                this.addSubCommand(Backbone.MacroCommand.extend({
+                    initialize: function(){
+                        this.addSubCommand(Backbone.Command.extend({
+                            execute: function(){
+                                args.push(arguments[0]);
+                            }
+                        }));
                     }
                 }));
                 this.addSubCommand(Backbone.Command.extend({
