@@ -1,6 +1,6 @@
 {
   "name": "backbone-commands",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Backbone commands",
   "main": "backbone-commands.js",
   "repository": {

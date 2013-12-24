@@ -10,28 +10,30 @@ describe('Commands', function(){
         expect(window.Backbone.Commands).toBeDefined();
     });
     
-    it('is can be initialized', function(){
+    it('can be initialized', function(){
         expect(this.commandsInstance).toBeDefined();
         expect(this.commandsInstance).not.toBeNull();
     });
     
-    it('has an empty commandMap after instantiation', function(){
+    it('should have an empty commandMap after instantiation', function(){
+        expect(this.commandsInstance._commandMap).toBeDefined();
+        expect(this.commandsInstance._commandMap).not.toBeNull();
         expect(this.commandsInstance._commandMap).toEqual({});
     });
     
-    it('has a bind method', function(){
+    it('should have a bind method', function(){
         expect(typeof this.commandsInstance.bind).toEqual('function');
     });
     
-    it('has a unbind method', function(){
+    it('should have a unbind method', function(){
         expect(typeof this.commandsInstance.unbind).toEqual('function');
     });
     
-    it('has a willTrigger method', function(){
+    it('should have a willTrigger method', function(){
         expect(typeof this.commandsInstance.willTrigger).toEqual('function');
     });
     
-    it('has a trigger method', function(){
+    it('should have a trigger method', function(){
         expect(typeof this.commandsInstance.trigger).toEqual('function');
     });
     

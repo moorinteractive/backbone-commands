@@ -20,6 +20,11 @@ After installing the package, you can grab the `backbone-commands.js` or the min
 
 ## Changelog
 
+0.1.1
+
+* Added Backbone.MacroCommand
+
+
 0.1.0
 
 * Prototype
