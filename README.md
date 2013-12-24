@@ -22,7 +22,7 @@ After installing the package, you can grab the `backbone-commands.js` or the min
 
 ##### Binding and triggering commands
 ```js
-// Create an instance of Backbone.Command where we can bind and trigger commands.
+// Create an instance of Backbone.Commands where we can do some bindings.
 var commands = new Backbone.Commands();
 
 // Bind a Backbone.Command class (note that StartupCommand is not an instance).
@@ -44,6 +44,48 @@ var StartupCommand = Backbone.Command.extend({
 // Trigger the command with some payload.
 commands.trigger('startup', 'hello world', 'R. Moorman');
 ```
+
+##### Execute a StartupCommand which has multiple subcommands
+```js
+// Assume we bind the following command under startup.
+var StartupCommand = Backbone.MacroCommand.extend({
+    initialize: function(){
+        this.addSubCommand(DefineModelCommand);
+        this.addSubCommand(DefineViewCommand);
+        this.addSubCommand(DefineControllerCommand);
+    }
+});
+
+// Trigger the command.
+commands.trigger('startup');
+```
+
+##### Execute a async  StartupCommand which has multiple subcommands
+```js
+// ASync load of configuration via a provided API endpoint.
+var LoadConfigCommand = Backbone.ASyncCommand.extend({
+    execute: function(address){
+        this.model.fetch({
+            success: this.completeCommand
+        });
+    }
+});
+
+// Assume we bind the following command under startup.
+var StartupCommand = Backbone.AsyncMacroCommand.extend({
+    initialize: function(){
+        this.addSubCommand(LoadConfigCommand);
+        this.addSubCommand(DefineModelCommand);
+        this.addSubCommand(DefineViewCommand);
+        this.addSubCommand(DefineControllerCommand);
+    }
+});
+
+// Trigger the command.
+commands.trigger('startup', 'http://localhost/api/config/?format=json);
+```
+
+Note that when you are using an ``ASyncCommand``, you should call ``commandComplete`` when your command has finished it's async logic.
 
 ## Changelog
 
