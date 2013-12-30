@@ -13,7 +13,7 @@
     _.extend(Commands.prototype, {
         /**
          * @param {string}
-         * @param {Backbone.Command}
+         * @param {Backbone.Command|Backbone.MacroCommand|Backbone.ASyncCommand|Backbone.ASyncMacroCommand}
          */
         bind: function(name, commandClass){
             if (!typeof commandClass == 'object' || typeof commandClass.execute == 'function'){
@@ -91,7 +91,7 @@
         },
         
         /**
-         * @param {Backbone.Command}
+         * @param {Backbone.Command|Backbone.MacroCommand|Backbone.ASyncCommand|Backbone.ASyncMacroCommand}
          */
         addSubCommand: function(commandClass){
             this._subCommands.push(commandClass);
@@ -111,12 +111,12 @@
     // Attach all inheritable methods to the ASyncCommand prototype.
     _.extend(ASyncCommand.prototype, {
         /**
-         *
+         * Execyte the async command.
          */
         execute: function(){},
         
         /**
-         *
+         * Mark the command as completed, used for async execution of commands.
          */
         completeCommand: function(){
             if (this.onComplete !== null && typeof this.onComplete == 'function'){
@@ -125,7 +125,7 @@
         }
     });
     
-    // Set up initialize for Command.
+    // Set up initialize for ASyncCommand.
     Backbone.ASyncCommand.extend = Backbone.Model.extend;
     
     /**
@@ -156,7 +156,7 @@
         },
         
         /**
-         *
+         * Execute upcoming sub command in the queue.
          */
         executeNextCommand: function(){
             if (this._subCommands.length){
@@ -166,6 +166,12 @@
                 if (isASync){
                     command.onCompleteContext = this;
                     command.onComplete = this.executeNextCommand;
+                    
+                    // bind command context, to make async callbacks directly
+                    // callable with the correct context
+                    if (typeof command.completeCommand == 'function'){
+                        _.bindAll(command, 'completeCommand');
+                    }
                 }
                 
                 command.execute.apply(command, this._args);
@@ -185,14 +191,14 @@
         },
         
         /**
-         * @param {Backbone.Command}
+         * @param {Backbone.Command|Backbone.MacroCommand|Backbone.ASyncCommand|Backbone.ASyncMacroCommand}
          */
         addSubCommand: function(commandClass){
             this._subCommands.push(commandClass);
         }
     });
     
-    // Set up inheritance for Backbone.MacroCommand.
+    // Set up inheritance for Backbone.ASyncMacroCommand.
     Backbone.ASyncMacroCommand.extend = Backbone.Model.extend;
     
 })(_, Backbone);
