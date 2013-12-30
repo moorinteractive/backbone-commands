@@ -94,8 +94,10 @@ Note that when you are using an ``ASyncCommand``, you should call ``completeComm
 
 ## Changelog
 
-0.1.1
+0.2.0
 
+* Added usage examples in readme
+* Added Backbone.ASyncCommand and ASyncMacroCommand
 * Added Backbone.MacroCommand
 
 
